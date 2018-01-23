@@ -29,7 +29,7 @@ codeBlock' renderToken syntax tx =
         cfg = Sky.TokenizerConfig (M.fromList [(Sky.sName syntax, syntax)]) False
         result = Sky.tokenize cfg syntax expandedTabs
     in case result of
-        Left _ -> txt $ "blah" <> expandedTabs
+        Left _ -> txt expandedTabs
         Right tokLines -> rawCodeBlock renderToken tokLines
 
 rawCodeBlock :: (T.Text -> Widget n) -> [Sky.SourceLine] -> Widget n
