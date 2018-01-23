@@ -14,6 +14,10 @@ build-type:          Simple
 extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
+Flag demos
+    Description:     Build demonstration programs
+    Default:         False
+
 library
   ghc-options:         -Wall
   hs-source-dirs:      src
@@ -27,3 +31,17 @@ library
                        skylighting >= 0.6,
                        text,
                        containers
+
+executable brick-skylighting-demo
+  if !flag(demos)
+    Buildable: False
+  main-is:             Demo.hs
+  ghc-options:         -threaded -Wall
+  hs-source-dirs:      programs
+  default-language:    Haskell2010
+  build-depends:       base <= 5,
+                       brick,
+                       brick-skylighting,
+                       vty,
+                       skylighting >= 0.6,
+                       text
