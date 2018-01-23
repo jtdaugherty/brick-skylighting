@@ -1,0 +1,28 @@
+name:                brick-skylighting
+version:             0.1
+synopsis:            Show syntax-highlighted text in your Brick UI
+description:         This package provides a module to use Skylighting to perform
+                     syntax highlighting and display the results in Brick-based
+                     interfaces.
+license:             BSD3
+license-file:        LICENSE
+author:              Jonathan Daugherty
+maintainer:          cygnus@foobox.com
+copyright:           Jonathan Daugherty 2018
+category:            Graphics
+build-type:          Simple
+extra-source-files:  ChangeLog.md
+cabal-version:       >=1.10
+
+library
+  ghc-options:         -Wall
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  exposed-modules:     
+    Brick.Widgets.Skylighting
+
+  build-depends:       base <= 5,
+                       brick,
+                       skylighting,
+                       text,
+                       containers
