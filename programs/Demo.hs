@@ -30,16 +30,25 @@ pythonProgram = T.unlines
   , "    print('hello, world!')"
   ]
 
+programs :: [(T.Text, T.Text)]
+programs =
+    [ (haskellProgram, "Haskell")
+    , (pythonProgram, "Python")
+    ]
+
 ui :: Widget ()
 ui =
-    let Just haskellSyntax = S.syntaxByName S.defaultSyntaxMap "Haskell"
-        Just pythonSyntax  = S.syntaxByName S.defaultSyntaxMap "Python"
-    in (borderWithLabel (str "Haskell") $ codeBlock haskellSyntax haskellProgram) <=>
-       (borderWithLabel (str "Python") $ codeBlock pythonSyntax pythonProgram)
+    vBox progs
+    where
+        progs = showProg <$> programs
+        showProg (progSrc, langName) =
+            let Just syntax = S.syntaxByName S.defaultSyntaxMap langName
+            in (borderWithLabel (txt langName) $ codeBlock syntax progSrc)
 
 app :: App s e ()
 app =
-    (simpleApp ui) { appAttrMap = const $ attrMap V.defAttr $ attrMappingsForStyle S.espresso
+    (simpleApp ui) { appAttrMap = const $ attrMap V.defAttr $
+                                  attrMappingsForStyle S.espresso
                    }
 
 main :: IO ()
