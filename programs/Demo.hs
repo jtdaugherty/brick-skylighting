@@ -30,10 +30,22 @@ pythonProgram = T.unlines
   , "    print('hello, world!')"
   ]
 
+bashProgram :: T.Text
+bashProgram = T.unlines
+  [ "FOO=1"
+  , ""
+  , "function print_foo {"
+  , "  echo $FOO"
+  , "}"
+  , ""
+  , "print_foo"
+  ]
+
 programs :: [(T.Text, T.Text)]
 programs =
     [ (haskellProgram, "Haskell")
     , (pythonProgram, "Python")
+    , (bashProgram, "Bash")
     ]
 
 ui :: Widget ()
