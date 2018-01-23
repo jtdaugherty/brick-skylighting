@@ -2,12 +2,14 @@
 module Main where
 
 import Control.Monad (void)
+import Data.Monoid ((<>))
 import qualified Data.Text as T
 import qualified Graphics.Vty as V
 import qualified Skylighting as S
 
 import Brick
-import Brick.Widgets.Border (borderWithLabel)
+import Brick.Widgets.Center (hCenter)
+import Brick.Widgets.Border (borderWithLabel, hBorder)
 
 import Brick.Widgets.Skylighting (codeBlock, attrMappingsForStyle)
 
@@ -49,25 +51,27 @@ programs =
     , (bashProgram, "Bash")
     ]
 
-ui :: Widget ()
-ui =
-    vBox progs
+ui :: Int -> [Widget ()]
+ui styleIndex =
+    [vBox $ usage : hBorder : header : progs]
     where
+        usage = hCenter $ txt "q/esc:quit   up/down:change theme"
+        header = hCenter $ txt $ "Theme: " <> (fst $ styles !! styleIndex)
         progs = showProg <$> programs
         showProg (progSrc, langName) =
             let Just syntax = S.syntaxByName S.defaultSyntaxMap langName
             in (borderWithLabel (txt langName) $ codeBlock syntax progSrc)
 
-styles :: [S.Style]
+styles :: [(T.Text, S.Style)]
 styles =
-    [ S.kate
-    , S.breezeDark
-    , S.pygments
-    , S.espresso
-    , S.tango
-    , S.haddock
-    , S.monochrome
-    , S.zenburn
+    [ ("kate", S.kate)
+    , ("breezeDark", S.breezeDark)
+    , ("pygments", S.pygments)
+    , ("espresso", S.espresso)
+    , ("tango", S.tango)
+    , ("haddock", S.haddock)
+    , ("monochrome", S.monochrome)
+    , ("zenburn", S.zenburn)
     ]
 
 handleEvent :: Int -> BrickEvent () e -> EventM () (Next Int)
@@ -79,11 +83,12 @@ handleEvent i _ = continue i
 
 app :: App Int e ()
 app =
-    (simpleApp ui) { appAttrMap =
-                       \i -> attrMap V.defAttr $
-                             attrMappingsForStyle $ styles !! i
-                   , appHandleEvent = handleEvent
-                   }
+    (simpleApp emptyWidget)
+        { appDraw = ui
+        , appAttrMap = \i -> attrMap V.defAttr $
+                             attrMappingsForStyle $ snd $ styles !! i
+        , appHandleEvent = handleEvent
+        }
 
 main :: IO ()
 main = void $ defaultMain app 0
