@@ -27,11 +27,13 @@ codeBlock' renderToken syntax tx =
         cfg = Sky.TokenizerConfig (M.fromList [(Sky.sName syntax, syntax)]) False
         result = Sky.tokenize cfg syntax expandedTabs
     in case result of
-        Left _ -> withDefAttr highlightedCodeBlockAttr $ txt expandedTabs
+        Left _ -> txt expandedTabs
         Right tokLines -> rawCodeBlock renderToken tokLines
 
 rawCodeBlock :: (T.Text -> Widget n) -> [Sky.SourceLine] -> Widget n
-rawCodeBlock renderToken ls = vBox $ renderTokenLine renderToken <$> ls
+rawCodeBlock renderToken ls =
+    withDefAttr highlightedCodeBlockAttr $
+    vBox $ renderTokenLine renderToken <$> ls
 
 renderTokenLine :: (T.Text -> Widget n) -> Sky.SourceLine -> Widget n
 renderTokenLine _ [] = str " "
