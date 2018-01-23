@@ -84,7 +84,8 @@ attrNameForTokenType ty = highlightedCodeBlockAttr <> attrName s
 
 attrMappingsForStyle :: Sky.Style -> [(AttrName, V.Attr)]
 attrMappingsForStyle sty =
-    mkTokenTypeEntry <$> (M.toList $ Sky.tokenStyles sty)
+    (highlightedCodeBlockAttr, baseAttrFromPair (Sky.defaultColor sty, Sky.backgroundColor sty)) :
+    (mkTokenTypeEntry <$> (M.toList $ Sky.tokenStyles sty))
 
 baseAttrFromPair :: (Maybe Sky.Color, Maybe Sky.Color) -> V.Attr
 baseAttrFromPair (mf, mb) =
