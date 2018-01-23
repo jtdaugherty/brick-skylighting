@@ -2,6 +2,7 @@
 module Brick.Widgets.Skylighting
   ( codeBlock
   , codeBlock'
+  , rawCodeBlock
 
   -- * Attributes
   , attrMappingsForStyle
