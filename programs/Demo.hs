@@ -11,7 +11,7 @@ import Brick
 import Brick.Widgets.Center (hCenter)
 import Brick.Widgets.Border (borderWithLabel, hBorder)
 
-import Brick.Widgets.Skylighting (codeBlock, attrMappingsForStyle)
+import Brick.Widgets.Skylighting (simpleHighlight, attrMappingsForStyle)
 
 haskellProgram :: T.Text
 haskellProgram = T.unlines
@@ -59,8 +59,7 @@ ui styleIndex =
         header = hCenter $ txt $ "Theme: " <> (fst $ styles !! styleIndex)
         progs = showProg <$> programs
         showProg (progSrc, langName) =
-            let Just syntax = S.syntaxByName S.defaultSyntaxMap langName
-            in (borderWithLabel (txt langName) $ codeBlock syntax progSrc)
+            (borderWithLabel (txt langName) $ simpleHighlight langName progSrc)
 
 styles :: [(T.Text, S.Style)]
 styles =

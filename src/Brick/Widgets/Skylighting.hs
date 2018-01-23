@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Brick.Widgets.Skylighting
-  ( codeBlock
-  , codeBlock'
-  , rawCodeBlock
+  ( simpleHighlight
+  , highlight
+  , highlight'
+  , renderRawSource
 
   -- * Attributes
   , attrMappingsForStyle
@@ -21,20 +22,29 @@ import Brick
 import qualified Skylighting as Sky
 import Skylighting (TokenType(..))
 
-codeBlock :: Sky.Syntax -> T.Text -> Widget n
-codeBlock = codeBlock' txt
+simpleHighlight :: T.Text -> T.Text -> Widget n
+simpleHighlight langName body =
+    case Sky.syntaxByName Sky.defaultSyntaxMap langName of
+        Nothing -> txt $ expandTabs body
+        Just syntax -> highlight syntax body
 
-codeBlock' :: (T.Text -> Widget n) -> Sky.Syntax -> T.Text -> Widget n
-codeBlock' renderToken syntax tx =
-    let expandedTabs = T.replace "\t" (T.replicate 8 " ") tx
-        cfg = Sky.TokenizerConfig (M.fromList [(Sky.sName syntax, syntax)]) False
-        result = Sky.tokenize cfg syntax expandedTabs
+highlight :: Sky.Syntax -> T.Text -> Widget n
+highlight = highlight' txt
+
+highlight' :: (T.Text -> Widget n) -> Sky.Syntax -> T.Text -> Widget n
+highlight' renderToken syntax tx =
+    let cfg = Sky.TokenizerConfig (M.fromList [(Sky.sName syntax, syntax)]) False
+        expanded = expandTabs tx
+        result = Sky.tokenize cfg syntax expanded
     in case result of
-        Left _ -> txt expandedTabs
-        Right tokLines -> rawCodeBlock renderToken tokLines
+        Left _ -> txt expanded
+        Right tokLines -> renderRawSource renderToken tokLines
 
-rawCodeBlock :: (T.Text -> Widget n) -> [Sky.SourceLine] -> Widget n
-rawCodeBlock renderToken ls =
+expandTabs :: T.Text -> T.Text
+expandTabs = T.replace "\t" (T.replicate 8 " ")
+
+renderRawSource :: (T.Text -> Widget n) -> [Sky.SourceLine] -> Widget n
+renderRawSource renderToken ls =
     withDefAttr highlightedCodeBlockAttr $
     vBox $ renderTokenLine renderToken <$> ls
 
