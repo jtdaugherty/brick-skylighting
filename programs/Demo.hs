@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Control.Monad (void)
 import qualified Data.Text as T
 import qualified Graphics.Vty as V
 import qualified Skylighting as S
@@ -57,11 +58,32 @@ ui =
             let Just syntax = S.syntaxByName S.defaultSyntaxMap langName
             in (borderWithLabel (txt langName) $ codeBlock syntax progSrc)
 
-app :: App s e ()
+styles :: [S.Style]
+styles =
+    [ S.kate
+    , S.breezeDark
+    , S.pygments
+    , S.espresso
+    , S.tango
+    , S.haddock
+    , S.monochrome
+    , S.zenburn
+    ]
+
+handleEvent :: Int -> BrickEvent () e -> EventM () (Next Int)
+handleEvent i (VtyEvent (V.EvKey V.KUp [])) = continue $ (i + 1) `mod` length styles
+handleEvent i (VtyEvent (V.EvKey V.KDown [])) = continue $ (i - 1) `mod` length styles
+handleEvent i (VtyEvent (V.EvKey V.KEsc [])) = halt i
+handleEvent i (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt i
+handleEvent i _ = continue i
+
+app :: App Int e ()
 app =
-    (simpleApp ui) { appAttrMap = const $ attrMap V.defAttr $
-                                  attrMappingsForStyle S.espresso
+    (simpleApp ui) { appAttrMap =
+                       \i -> attrMap V.defAttr $
+                             attrMappingsForStyle $ styles !! i
+                   , appHandleEvent = handleEvent
                    }
 
 main :: IO ()
-main = defaultMain app ()
+main = void $ defaultMain app 0
