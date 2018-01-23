@@ -83,11 +83,12 @@ handleEvent i _ = continue i
 
 app :: App Int e ()
 app =
-    (simpleApp emptyWidget)
-        { appDraw = ui
+    App { appDraw = ui
         , appAttrMap = \i -> attrMap V.defAttr $
                              attrMappingsForStyle $ snd $ styles !! i
         , appHandleEvent = handleEvent
+        , appChooseCursor = neverShowCursor
+        , appStartEvent = return
         }
 
 main :: IO ()
