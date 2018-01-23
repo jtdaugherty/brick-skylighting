@@ -64,10 +64,10 @@ ui styleIndex =
 
 styles :: [(T.Text, S.Style)]
 styles =
-    [ ("kate", S.kate)
+    [ ("espresso", S.espresso)
+    , ("kate", S.kate)
     , ("breezeDark", S.breezeDark)
     , ("pygments", S.pygments)
-    , ("espresso", S.espresso)
     , ("tango", S.tango)
     , ("haddock", S.haddock)
     , ("monochrome", S.monochrome)
