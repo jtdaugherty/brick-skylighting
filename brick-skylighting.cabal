@@ -14,6 +14,9 @@ build-type:          Simple
 extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
+extra-doc-files:
+  README.md
+
 Flag demos
     Description:     Build demonstration programs
     Default:         False
