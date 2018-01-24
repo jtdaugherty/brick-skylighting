@@ -12,10 +12,16 @@ copyright:           Jonathan Daugherty 2018
 category:            Graphics
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
-cabal-version:       >=1.10
+cabal-version:       >=1.18
+Homepage:            https://github.com/jtdaugherty/brick-skylighting/
+Bug-reports:         https://github.com/jtdaugherty/brick-skylighting/issues
 
 extra-doc-files:
   README.md
+
+Source-Repository head
+  type:     git
+  location: git://github.com/jtdaugherty/brick-skylighting.git
 
 Flag demos
     Description:     Build demonstration programs
