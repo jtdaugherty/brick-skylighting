@@ -48,7 +48,10 @@ import Brick
 import qualified Skylighting as Sky
 import Skylighting (TokenType(..))
 
--- | The simplest way to highlight some text.
+-- | The simplest way to highlight some text. If the specified language
+-- does not have a corresponding Skylighting parser or if a parser is
+-- found but fails to parse the input, the text is rendered as-is and
+-- tab characters are converted to eight spaces.
 simpleHighlight :: T.Text
                 -- ^ The Skylighting name of the language in which the
                 -- input text is written.
@@ -72,7 +75,9 @@ highlight = highlight' txt
 -- | If you already have a 'Syntax' handy and want to have control over
 -- how each 'Text' token in the Skylighting AST gets converted to a
 -- 'Widget', this provides more control than 'highlight', which just
--- defaults the text widget constructor to 'txt'.
+-- defaults the text widget constructor to 'txt'. If the specified
+-- parser fails to parse the input, the text is displayed as-is and tab
+-- characters are converted to eight spaces.
 highlight' :: (T.Text -> Widget n)
            -- ^ The token widget constructor.
            -> Sky.Syntax
@@ -83,7 +88,7 @@ highlight' :: (T.Text -> Widget n)
 highlight' renderToken syntax tx =
     let cfg = Sky.TokenizerConfig (M.fromList [(Sky.sName syntax, syntax)]) False
         expanded = expandTabs tx
-        result = Sky.tokenize cfg syntax expanded
+        result = Sky.tokenize cfg syntax tx
     in case result of
         Left _ -> txt expanded
         Right tokLines -> renderRawSource renderToken tokLines
