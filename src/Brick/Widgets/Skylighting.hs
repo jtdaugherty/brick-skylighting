@@ -26,7 +26,8 @@
 -- See the @programs/Demo.hs@ program in this package for an example of a
 -- complete program that uses this module.
 module Brick.Widgets.Skylighting
-  ( simpleHighlight
+  ( -- * Highlighting functions
+    simpleHighlight
   , highlight
   , highlight'
   , renderRawSource
