@@ -156,9 +156,9 @@ attrNameForTokenType ty = highlightedCodeBlockAttr <> attrName s
           ErrorTok          -> "error"
           NormalTok         -> "normal"
 
--- | Given a Skylighting 'Style', build a reasonable list of
--- Brick-compatible 'AttrMap' entries. This may return 256-color
--- entries.
+-- | Given a Skylighting 'Style', build an equivalent list of
+-- Brick-compatible 'AttrMap' entries. This will usually return
+-- 256-color entries.
 attrMappingsForStyle :: Sky.Style -> [(AttrName, V.Attr)]
 attrMappingsForStyle sty =
     (highlightedCodeBlockAttr, baseAttrFromPair (Sky.defaultColor sty, Sky.backgroundColor sty)) :
