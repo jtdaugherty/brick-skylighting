@@ -11,7 +11,7 @@ maintainer:          cygnus@foobox.com
 copyright:           Jonathan Daugherty 2018
 category:            Graphics
 build-type:          Simple
-extra-source-files:  ChangeLog.md
+extra-source-files:  CHANGELOG.md
 cabal-version:       >=1.10
 
 extra-doc-files:
