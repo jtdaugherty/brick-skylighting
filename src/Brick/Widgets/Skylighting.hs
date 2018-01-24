@@ -23,7 +23,7 @@
 -- a specific attribute for each kind of Skylighting token as per
 -- 'attrNameForTokenType'.
 --
--- See the 'Demo.hs' program in this package for an example of a
+-- See the @Demo.hs@ program in this package for an example of a
 -- complete program that uses this module.
 module Brick.Widgets.Skylighting
   ( simpleHighlight
