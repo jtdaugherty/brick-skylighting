@@ -2,6 +2,8 @@
 brick-skylighting
 =================
 
+![](images/demo.png)
+
 This package extends the [brick](https://github.com/jtdaugherty/brick)
 library with syntax highlighting support using the
 [Skylighting](https://github.com/jgm/skylighting) library.
