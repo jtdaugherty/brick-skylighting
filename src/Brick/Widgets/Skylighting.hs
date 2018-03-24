@@ -6,6 +6,8 @@
 --
 --  * have some 'Text' you want to syntax-highlight.
 --  * know the language in which the 'Text' is expressed.
+--  * have a loaded 'SyntaxMap' or 'Syntax' that can be used to format
+--    the input text.
 --  * have a Skylighting 'Style' you'd like to use to determine the
 --    colors, either from the Skylighting package or one of your own.
 --
