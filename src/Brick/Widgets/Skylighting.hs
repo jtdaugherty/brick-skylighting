@@ -28,6 +28,7 @@
 module Brick.Widgets.Skylighting
   ( -- * Highlighting functions
     highlight
+  , highlightFromMap
   , highlight'
   , renderRawSource
 
@@ -47,6 +48,25 @@ import Brick
 
 import qualified Skylighting.Core as Sky
 import Skylighting.Types (TokenType(..))
+
+-- Hightlight the specified text by attempting to locate a syntax
+-- highlighter for the specified language in a syntax map. If the
+-- specified language does not have a corresponding Skylighting parser
+-- or if a parser is found but fails to parse the input, the text is
+-- rendered as-is and tab characters are converted to eight spaces.
+highlightFromMap :: Sky.SyntaxMap
+                 -- ^ The syntax map to use to locate a syntax
+                 -- definition.
+                 -> T.Text
+                 -- ^ The Skylighting name of the language in which the
+                 -- input text is written.
+                 -> T.Text
+                 -- ^ The text to be syntax-highlighted.
+                 -> Widget n
+highlightFromMap m name input =
+    case Sky.syntaxByName m name of
+        Nothing -> txt $ expandTabs input
+        Just s -> highlight s input
 
 -- | Highlight the specified text using the provided syntax definition.
 highlight :: Sky.Syntax
