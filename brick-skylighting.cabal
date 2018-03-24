@@ -1,5 +1,5 @@
 name:                brick-skylighting
-version:             0.1
+version:             0.2
 synopsis:            Show syntax-highlighted text in your Brick UI
 description:         This package provides a module to use Skylighting to perform
                      syntax highlighting and display the results in Brick-based
