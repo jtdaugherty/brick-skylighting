@@ -11,7 +11,7 @@
 --
 -- To highlight some text in your user interface, use one of
 -- the (increasingly finer-grained) highlighting functions
--- 'simpleHighlight', 'highlight', 'highlight'', or 'renderRawSource'.
+-- 'highlight', 'highlight'', or 'renderRawSource'.
 --
 -- To actually see pretty colors, you'll need to update your
 -- application's 'AttrMap' with name-to-color mappings. Those can be
@@ -27,8 +27,7 @@
 -- complete program that uses this module.
 module Brick.Widgets.Skylighting
   ( -- * Highlighting functions
-    simpleHighlight
-  , highlight
+    highlight
   , highlight'
   , renderRawSource
 
@@ -46,26 +45,10 @@ import qualified Graphics.Vty as V
 
 import Brick
 
-import qualified Skylighting as Sky
-import Skylighting (TokenType(..))
+import qualified Skylighting.Core as Sky
+import Skylighting.Types (TokenType(..))
 
--- | The simplest way to highlight some text. If the specified language
--- does not have a corresponding Skylighting parser or if a parser is
--- found but fails to parse the input, the text is rendered as-is and
--- tab characters are converted to eight spaces.
-simpleHighlight :: T.Text
-                -- ^ The Skylighting name of the language in which the
-                -- input text is written.
-                -> T.Text
-                -- ^ The text to be syntax-highlighted.
-                -> Widget n
-simpleHighlight langName body =
-    case Sky.syntaxByName Sky.defaultSyntaxMap langName of
-        Nothing -> txt $ expandTabs body
-        Just syntax -> highlight syntax body
-
--- | If you already have a 'Syntax' handy, this provides more control
--- than 'simpleHighlight'.
+-- | Highlight the specified text using the provided syntax definition.
 highlight :: Sky.Syntax
           -- ^ The syntax to use to parse the input text.
           -> T.Text

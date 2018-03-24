@@ -2,16 +2,19 @@
 module Main where
 
 import Control.Monad (void)
+import Data.Maybe (fromJust)
 import Data.Monoid ((<>))
 import qualified Data.Text as T
 import qualified Graphics.Vty as V
-import qualified Skylighting as S
+import qualified Skylighting.Core as S
+import System.Environment (getArgs, getProgName)
+import System.Exit (exitFailure)
 
 import Brick
 import Brick.Widgets.Center (hCenter)
 import Brick.Widgets.Border (borderWithLabel, hBorder)
 
-import Brick.Widgets.Skylighting (simpleHighlight, attrMappingsForStyle)
+import Brick.Widgets.Skylighting (highlight, attrMappingsForStyle)
 
 haskellProgram :: T.Text
 haskellProgram = T.unlines
@@ -44,22 +47,15 @@ bashProgram = T.unlines
   , "print_foo"
   ]
 
-programs :: [(T.Text, T.Text)]
-programs =
-    [ (haskellProgram, "Haskell")
-    , (pythonProgram, "Python")
-    , (bashProgram, "Bash")
-    ]
-
-ui :: Int -> [Widget ()]
-ui styleIndex =
-    [vBox $ usage : hBorder : header : progs]
+ui :: [(T.Text, S.Syntax)] -> Int -> [Widget ()]
+ui programs styleIndex =
+    [vBox $ help : hBorder : header : progs]
     where
-        usage = hCenter $ txt "q/esc:quit   up/down:change theme"
+        help = hCenter $ txt "q/esc:quit   up/down:change theme"
         header = hCenter $ txt $ "Theme: " <> (fst $ styles !! styleIndex)
         progs = showProg <$> programs
-        showProg (progSrc, langName) =
-            (borderWithLabel (txt langName) $ simpleHighlight langName progSrc)
+        showProg (progSrc, syntax) =
+            (borderWithLabel (txt $ S.sName syntax) $ highlight syntax progSrc)
 
 styles :: [(T.Text, S.Style)]
 styles =
@@ -80,9 +76,9 @@ handleEvent i (VtyEvent (V.EvKey V.KEsc [])) = halt i
 handleEvent i (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt i
 handleEvent i _ = continue i
 
-app :: App Int e ()
-app =
-    App { appDraw = ui
+app :: [(T.Text, S.Syntax)] -> App Int e ()
+app programs =
+    App { appDraw = ui programs
         , appAttrMap = \i -> attrMap V.defAttr $
                              attrMappingsForStyle $ snd $ styles !! i
         , appHandleEvent = handleEvent
@@ -90,5 +86,30 @@ app =
         , appStartEvent = return
         }
 
+usage :: IO ()
+usage = do
+    pn <- getProgName
+    putStrLn $ pn <> " <path to XML syntax definintion directory>"
+
 main :: IO ()
-main = void $ defaultMain app 0
+main = do
+    args <- getArgs
+    path <- case args of
+        [p] -> return p
+        _ -> usage >> exitFailure
+
+    syntaxMap <- do
+        result <- S.loadSyntaxesFromDir path
+        case result of
+            Left e -> do
+                putStrLn $ "Failed to load syntax map: " <> e
+                exitFailure
+            Right m -> return m
+
+    let syntax = fromJust . S.syntaxByName syntaxMap
+        programs = [ (haskellProgram, syntax "haskell")
+                   , (pythonProgram, syntax "python")
+                   , (bashProgram, syntax "bash")
+                   ]
+
+    void $ defaultMain (app programs) 0

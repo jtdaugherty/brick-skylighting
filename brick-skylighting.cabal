@@ -37,7 +37,7 @@ library
   build-depends:       base <= 5,
                        brick,
                        vty,
-                       skylighting >= 0.6,
+                       skylighting-core >= 0.7,
                        text,
                        containers
 
@@ -52,5 +52,5 @@ executable brick-skylighting-demo
                        brick,
                        brick-skylighting,
                        vty,
-                       skylighting >= 0.6,
+                       skylighting-core >= 0.7,
                        text
