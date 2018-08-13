@@ -1,5 +1,12 @@
 # Revision history for brick-skylighting
 
+0.3
+===
+
+ * Increased Vty lower bound to 5.23.1 to support italics.
+ * Skylighting token styles that used italics now translate to the Vty
+   italics style rather than the standout style.
+
 0.2
 ===
 
