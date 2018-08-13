@@ -187,7 +187,7 @@ mkTokenTypeEntry (ty, tSty) =
         baseAttr = baseAttrFromPair (Sky.tokenColor tSty, Sky.tokenBackground tSty)
         setStyle =
             if Sky.tokenBold tSty then flip V.withStyle V.bold else id .
-            if Sky.tokenItalic tSty then flip V.withStyle V.standout else id .
+            if Sky.tokenItalic tSty then flip V.withStyle V.italic else id .
             if Sky.tokenUnderline tSty then flip V.withStyle V.underline else id
 
     in (attrNameForTokenType ty, a)
