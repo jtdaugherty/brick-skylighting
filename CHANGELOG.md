@@ -1,5 +1,10 @@
 # Revision history for brick-skylighting
 
+1.0
+===
+
+ * Updated to work with `brick` 1.0.
+
 0.3
 ===
 
