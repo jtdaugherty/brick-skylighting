@@ -53,4 +53,5 @@ executable brick-skylighting-demo
                        brick-skylighting,
                        vty,
                        skylighting-core >= 0.7,
-                       text
+                       text,
+                       mtl

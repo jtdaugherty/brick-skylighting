@@ -121,7 +121,7 @@ renderTokenLine renderToken toks =
 
 -- | The base attribute name for all syntax-highlighted renderings.
 highlightedCodeBlockAttr :: AttrName
-highlightedCodeBlockAttr = "highlightedCodeBlock"
+highlightedCodeBlockAttr = attrName "highlightedCodeBlock"
 
 -- | The constructor for attribute names for each 'TokenType' in
 -- Skylighting.

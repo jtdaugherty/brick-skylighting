@@ -69,12 +69,12 @@ styles =
     , ("zenburn", S.zenburn)
     ]
 
-handleEvent :: Int -> BrickEvent () e -> EventM () (Next Int)
-handleEvent i (VtyEvent (V.EvKey V.KUp [])) = continue $ (i + 1) `mod` length styles
-handleEvent i (VtyEvent (V.EvKey V.KDown [])) = continue $ (i - 1) `mod` length styles
-handleEvent i (VtyEvent (V.EvKey V.KEsc [])) = halt i
-handleEvent i (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt i
-handleEvent i _ = continue i
+handleEvent :: BrickEvent () e -> EventM () Int ()
+handleEvent (VtyEvent (V.EvKey V.KUp [])) = modify $ \i -> (i + 1) `mod` length styles
+handleEvent (VtyEvent (V.EvKey V.KDown [])) = modify $ \i -> (i - 1) `mod` length styles
+handleEvent (VtyEvent (V.EvKey V.KEsc [])) = halt
+handleEvent (VtyEvent (V.EvKey (V.KChar 'q') [])) = halt
+handleEvent _ = return ()
 
 app :: [(T.Text, S.Syntax)] -> App Int e ()
 app programs =
@@ -83,7 +83,7 @@ app programs =
                              attrMappingsForStyle $ snd $ styles !! i
         , appHandleEvent = handleEvent
         , appChooseCursor = neverShowCursor
-        , appStartEvent = return
+        , appStartEvent = return ()
         }
 
 usage :: IO ()
