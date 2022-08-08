@@ -35,7 +35,7 @@ library
     Brick.Widgets.Skylighting
 
   build-depends:       base <= 5,
-                       brick >= 0.39,
+                       brick >= 1.0,
                        vty >= 5.23.1,
                        skylighting-core >= 0.7,
                        text,
